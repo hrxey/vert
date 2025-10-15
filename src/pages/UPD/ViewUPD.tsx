@@ -156,40 +156,40 @@ export const ViewUPD: React.FC = () => {
           </Button>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Информация о документе</h2>
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Информация о документе</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
               <div className="flex items-start">
-                <FileText className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                <FileText className="w-4 h-4 text-gray-400 mr-2 mt-0.5" />
                 <div>
-                  <div className="text-sm text-gray-500">Номер УПД</div>
-                  <div className="text-base font-medium text-gray-900">
+                  <div className="text-xs text-gray-500">Номер УПД</div>
+                  <div className="text-sm font-medium text-gray-900">
                     {updDocument.document_number}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <Calendar className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                <Calendar className="w-4 h-4 text-gray-400 mr-2 mt-0.5" />
                 <div>
-                  <div className="text-sm text-gray-500">Дата УПД</div>
-                  <div className="text-base font-medium text-gray-900">
+                  <div className="text-xs text-gray-500">Дата УПД</div>
+                  <div className="text-sm font-medium text-gray-900">
                     {formatDate(updDocument.document_date)}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-start">
-                <Building2 className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                <Building2 className="w-4 h-4 text-gray-400 mr-2 mt-0.5" />
                 <div>
-                  <div className="text-sm text-gray-500">Контрагент</div>
-                  <div className="text-base font-medium text-gray-900">
+                  <div className="text-xs text-gray-500">Контрагент</div>
+                  <div className="text-sm font-medium text-gray-900">
                     {updDocument.counterparties.name}
                   </div>
                   {updDocument.counterparties.inn && (
-                    <div className="text-sm text-gray-500">
+                    <div className="text-xs text-gray-500">
                       ИНН: {updDocument.counterparties.inn}
                     </div>
                   )}
@@ -197,76 +197,61 @@ export const ViewUPD: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               {updDocument.subdivisions && (
                 <div className="flex items-start">
-                  <MapPin className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-gray-400 mr-2 mt-0.5" />
                   <div>
-                    <div className="text-sm text-gray-500">Подразделение</div>
-                    <div className="text-base font-medium text-gray-900">
+                    <div className="text-xs text-gray-500">Подразделение</div>
+                    <div className="text-sm font-medium text-gray-900">
                       {updDocument.subdivisions.name}
                     </div>
                   </div>
                 </div>
               )}
 
-              <div className="pt-4 border-t border-gray-200">
-                <div className="text-sm text-gray-500 mb-2">Суммы по документу</div>
-                <div className="space-y-2">
+              <div className="pt-3 border-t border-gray-200">
+                <div className="text-xs text-gray-500 mb-2">Суммы по документу</div>
+                <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Доходы:</span>
-                    <span className="text-base font-semibold text-green-600">
+                    <span className="text-xs text-gray-600">Доходы:</span>
+                    <span className="text-sm font-semibold text-green-600">
                       {formatCurrency(updDocument.total_income || 0)}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Расходы:</span>
-                    <span className="text-base font-semibold text-red-600">
+                    <span className="text-xs text-gray-600">Расходы:</span>
+                    <span className="text-sm font-semibold text-red-600">
                       {formatCurrency(updDocument.total_expense || 0)}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                    <span className="text-base font-medium text-gray-900">Итого:</span>
-                    <span className="text-lg font-bold text-gray-900">
+                  <div className="flex justify-between items-center pt-1.5 border-t border-gray-200">
+                    <span className="text-sm font-medium text-gray-900">Итого:</span>
+                    <span className="text-base font-bold text-gray-900">
                       {formatCurrency(totalAmount)}
                     </span>
                   </div>
                 </div>
               </div>
-
-              <div>
-                <div className="text-sm text-gray-500 mb-1">Статус</div>
-                <span
-                  className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
-                    updDocument.status === 'Draft'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : updDocument.status === 'Completed'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-800'
-                  }`}
-                >
-                  {updDocument.status}
-                </span>
-              </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <h2 className="text-base font-semibold text-gray-900 mb-4">
             Позиции документа ({items.length})
           </h2>
 
           {items.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
+            <div className="text-center py-8 text-xs text-gray-500">
               Нет позиций в данном УПД
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-3">
               {Object.entries(groupedItems).map(([receptionNumber, positions]) => (
                 <div key={receptionNumber} className="border border-gray-200 rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                    <h3 className="text-sm font-semibold text-gray-700">
+                  <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
+                    <h3 className="text-xs font-semibold text-gray-700">
                       Приемка: {receptionNumber}
                     </h3>
                   </div>
@@ -275,55 +260,98 @@ export const ViewUPD: React.FC = () => {
                     const firstItem = Object.values(workGroups)[0][0]
                     return (
                       <div key={positionNumber} className="border-b border-gray-200 last:border-b-0">
-                        <div className="bg-blue-50 px-4 py-2">
-                          <div className="text-sm font-medium text-gray-900">
+                        <div className="bg-blue-50 px-3 py-2">
+                          <div className="text-xs font-medium text-gray-900">
                             Позиция {positionNumber}: {firstItem.motor_service_description}
                           </div>
-                          <div className="text-xs text-gray-600 mt-1">
+                          <div className="text-xs text-gray-600 mt-0.5">
                             Инв. №: {firstItem.motor_inventory_number || 'Не указан'}
                             {firstItem.subdivision_name && ` | ${firstItem.subdivision_name}`}
                           </div>
                         </div>
 
-                        {Object.entries(workGroups).map(([workGroup, groupItems]) => (
-                          <div key={workGroup} className="px-4 py-3">
-                            <div className="text-sm font-medium text-gray-700 mb-2">
-                              {workGroup}
-                            </div>
-                            <div className="space-y-2">
-                              {groupItems.map((item) => (
-                                <div
-                                  key={item.id}
-                                  className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded"
-                                >
-                                  <div className="flex-1">
-                                    <div className="text-sm text-gray-900">
-                                      {item.item_description}
+                        {Object.entries(workGroups).map(([workGroup, groupItems]) => {
+                          const incomeItems = groupItems.filter(item => item.transaction_type === 'Доходы')
+                          const expenseItems = groupItems.filter(item => item.transaction_type === 'Расходы')
+
+                          return (
+                            <div key={workGroup} className="px-3 py-2">
+                              <div className="text-xs font-medium text-gray-700 mb-2">
+                                {workGroup}
+                              </div>
+                              <div className="space-y-2">
+                                {incomeItems.length > 0 && (
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-1 text-xs text-green-600 font-medium mb-1">
+                                      <span>↗</span>
+                                      <span>Доходы</span>
                                     </div>
-                                    <div className="text-xs text-gray-500">
-                                      {item.quantity} × {formatCurrency(item.price)}
-                                    </div>
+                                    {incomeItems.map((item) => (
+                                      <div
+                                        key={item.id}
+                                        className="py-1.5 px-2 rounded transition-colors hover:bg-gray-50"
+                                      >
+                                        <div className="flex items-center justify-between gap-3">
+                                          <p className="text-xs text-gray-900 flex-1">
+                                            {item.item_description}
+                                          </p>
+                                          <div className="text-right">
+                                            <p className="text-xs text-gray-600 font-medium">
+                                              {item.quantity}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="mt-0.5 flex items-center gap-2">
+                                          <span className="text-xs font-medium text-green-700">
+                                            + {((item.quantity || 1) * (item.price || 0)).toLocaleString('ru-RU')} ₽
+                                          </span>
+                                          <span className="text-xs text-gray-400">•</span>
+                                          <span className="text-xs text-gray-500">
+                                            {item.price.toLocaleString('ru-RU')} ₽/шт
+                                          </span>
+                                        </div>
+                                      </div>
+                                    ))}
                                   </div>
-                                  <div className="text-right ml-4">
-                                    <div
-                                      className={`text-sm font-semibold ${
-                                        item.transaction_type === 'Доходы'
-                                          ? 'text-green-600'
-                                          : 'text-red-600'
-                                      }`}
-                                    >
-                                      {item.transaction_type === 'Доходы' ? '+' : '-'}
-                                      {formatCurrency((item.quantity || 1) * (item.price || 0))}
+                                )}
+                                {expenseItems.length > 0 && (
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-1 text-xs text-red-600 font-medium mb-1">
+                                      <span>↘</span>
+                                      <span>Расходы</span>
                                     </div>
-                                    <div className="text-xs text-gray-500">
-                                      {item.transaction_type}
-                                    </div>
+                                    {expenseItems.map((item) => (
+                                      <div
+                                        key={item.id}
+                                        className="py-1.5 px-2 rounded transition-colors hover:bg-gray-50"
+                                      >
+                                        <div className="flex items-center justify-between gap-3">
+                                          <p className="text-xs text-gray-900 flex-1">
+                                            {item.item_description}
+                                          </p>
+                                          <div className="text-right">
+                                            <p className="text-xs text-gray-600 font-medium">
+                                              {item.quantity}
+                                            </p>
+                                          </div>
+                                        </div>
+                                        <div className="mt-0.5 flex items-center gap-2">
+                                          <span className="text-xs font-medium text-red-700">
+                                            - {((item.quantity || 1) * (item.price || 0)).toLocaleString('ru-RU')} ₽
+                                          </span>
+                                          <span className="text-xs text-gray-400">•</span>
+                                          <span className="text-xs text-gray-500">
+                                            {item.price.toLocaleString('ru-RU')} ₽/шт
+                                          </span>
+                                        </div>
+                                      </div>
+                                    ))}
                                   </div>
-                                </div>
-                              ))}
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          )
+                        })}
                       </div>
                     )
                   })}
