@@ -10,6 +10,7 @@ import {
   AvailableReceptionItem,
 } from '../../services/updService'
 import { ArrowLeft, FileText, Calendar, Building2, MapPin } from 'lucide-react'
+import { ViewUPDHierarchy } from '../../components/UPD/ViewUPDHierarchy'
 
 const formatDate = (dateString: string): string => {
   const date = new Date(dateString)
@@ -29,14 +30,6 @@ const formatCurrency = (amount: number): string => {
     currency: 'RUB',
     minimumFractionDigits: 2,
   }).format(amount)
-}
-
-interface GroupedItems {
-  [receptionNumber: string]: {
-    [positionNumber: number]: {
-      [workGroup: string]: AvailableReceptionItem[]
-    }
-  }
 }
 
 export const ViewUPD: React.FC = () => {
@@ -74,30 +67,6 @@ export const ViewUPD: React.FC = () => {
     }
   }
 
-  const groupItems = (items: AvailableReceptionItem[]): GroupedItems => {
-    const grouped: GroupedItems = {}
-
-    items.forEach((item) => {
-      const receptionKey = item.reception_number
-      const positionKey = item.position_number
-      const workGroupKey = item.work_group || 'Без группы'
-
-      if (!grouped[receptionKey]) {
-        grouped[receptionKey] = {}
-      }
-      if (!grouped[receptionKey][positionKey]) {
-        grouped[receptionKey][positionKey] = {}
-      }
-      if (!grouped[receptionKey][positionKey][workGroupKey]) {
-        grouped[receptionKey][positionKey][workGroupKey] = []
-      }
-
-      grouped[receptionKey][positionKey][workGroupKey].push(item)
-    })
-
-    return grouped
-  }
-
   const calculateTotal = (items: AvailableReceptionItem[]): number => {
     return items.reduce((sum, item) => {
       const itemTotal = (item.quantity || 1) * (item.price || 0)
@@ -131,7 +100,6 @@ export const ViewUPD: React.FC = () => {
     )
   }
 
-  const groupedItems = groupItems(items)
   const totalAmount = calculateTotal(items)
 
   return (
@@ -242,123 +210,7 @@ export const ViewUPD: React.FC = () => {
             Позиции документа ({items.length})
           </h2>
 
-          {items.length === 0 ? (
-            <div className="text-center py-8 text-xs text-gray-500">
-              Нет позиций в данном УПД
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {Object.entries(groupedItems).map(([receptionNumber, positions]) => (
-                <div key={receptionNumber} className="border border-gray-200 rounded-lg overflow-hidden">
-                  <div className="bg-gray-50 px-3 py-2 border-b border-gray-200">
-                    <h3 className="text-xs font-semibold text-gray-700">
-                      Приемка: {receptionNumber}
-                    </h3>
-                  </div>
-
-                  {Object.entries(positions).map(([positionNumber, workGroups]) => {
-                    const firstItem = Object.values(workGroups)[0][0]
-                    return (
-                      <div key={positionNumber} className="border-b border-gray-200 last:border-b-0">
-                        <div className="bg-blue-50 px-3 py-2">
-                          <div className="text-xs font-medium text-gray-900">
-                            Позиция {positionNumber}: {firstItem.motor_service_description}
-                          </div>
-                          <div className="text-xs text-gray-600 mt-0.5">
-                            Инв. №: {firstItem.motor_inventory_number || 'Не указан'}
-                            {firstItem.subdivision_name && ` | ${firstItem.subdivision_name}`}
-                          </div>
-                        </div>
-
-                        {Object.entries(workGroups).map(([workGroup, groupItems]) => {
-                          const incomeItems = groupItems.filter(item => item.transaction_type === 'Доходы')
-                          const expenseItems = groupItems.filter(item => item.transaction_type === 'Расходы')
-
-                          return (
-                            <div key={workGroup} className="px-3 py-2">
-                              <div className="text-xs font-medium text-gray-700 mb-2">
-                                {workGroup}
-                              </div>
-                              <div className="space-y-2">
-                                {incomeItems.length > 0 && (
-                                  <div className="space-y-1">
-                                    <div className="flex items-center gap-1 text-xs text-green-600 font-medium mb-1">
-                                      <span>↗</span>
-                                      <span>Доходы</span>
-                                    </div>
-                                    {incomeItems.map((item) => (
-                                      <div
-                                        key={item.id}
-                                        className="py-1.5 px-2 rounded transition-colors hover:bg-gray-50"
-                                      >
-                                        <div className="flex items-center justify-between gap-3">
-                                          <p className="text-xs text-gray-900 flex-1">
-                                            {item.item_description}
-                                          </p>
-                                          <div className="text-right">
-                                            <p className="text-xs text-gray-600 font-medium">
-                                              {item.quantity}
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="mt-0.5 flex items-center gap-2">
-                                          <span className="text-xs font-medium text-green-700">
-                                            + {((item.quantity || 1) * (item.price || 0)).toLocaleString('ru-RU')} ₽
-                                          </span>
-                                          <span className="text-xs text-gray-400">•</span>
-                                          <span className="text-xs text-gray-500">
-                                            {item.price.toLocaleString('ru-RU')} ₽/шт
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                                {expenseItems.length > 0 && (
-                                  <div className="space-y-1">
-                                    <div className="flex items-center gap-1 text-xs text-red-600 font-medium mb-1">
-                                      <span>↘</span>
-                                      <span>Расходы</span>
-                                    </div>
-                                    {expenseItems.map((item) => (
-                                      <div
-                                        key={item.id}
-                                        className="py-1.5 px-2 rounded transition-colors hover:bg-gray-50"
-                                      >
-                                        <div className="flex items-center justify-between gap-3">
-                                          <p className="text-xs text-gray-900 flex-1">
-                                            {item.item_description}
-                                          </p>
-                                          <div className="text-right">
-                                            <p className="text-xs text-gray-600 font-medium">
-                                              {item.quantity}
-                                            </p>
-                                          </div>
-                                        </div>
-                                        <div className="mt-0.5 flex items-center gap-2">
-                                          <span className="text-xs font-medium text-red-700">
-                                            - {((item.quantity || 1) * (item.price || 0)).toLocaleString('ru-RU')} ₽
-                                          </span>
-                                          <span className="text-xs text-gray-400">•</span>
-                                          <span className="text-xs text-gray-500">
-                                            {item.price.toLocaleString('ru-RU')} ₽/шт
-                                          </span>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  })}
-                </div>
-              ))}
-            </div>
-          )}
+          <ViewUPDHierarchy items={items} />
         </div>
       </div>
     </AppLayout>
